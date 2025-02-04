@@ -1,0 +1,474 @@
+substitutions:
+  name: boneio-dr-8ch-03-342908
+  friendly_name: BoneIO Dimmer LED 342908
+  serial_prefix: dim # Don't change it.
+  # Constants:
+  static_ip_address: "192.168.31.214"
+  light_default_transition_time: 500ms
+  update_interval_energy_monitoring: 5s
+  loxone_ip: "192.168.31.10" # Change this to miniserver's IP address
+  loxone_udp_port: "9999" # BoneIO will send data to this port
+  listen_udp_port: "8888" # BoneIO will listen on this port (Miniserver needs to send data here)
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: false
+  project:
+    name: boneio.dimmer-led
+    version: "0.3"
+
+esp32:
+  board: esp32dev
+
+external_components:
+  - source: github://boneIO-eu/esphome-LM75@main #Original source and thank you note for BTomala https://github.com/boneIO-eu/esphome-lm75
+    components: [lm75]
+  - source:
+      type: git
+      url: https://github.com/hzkincony/esphome-loxone
+      ref: v1.2.1
+
+# https://github.com/boneIO-eu/esphome/devices/dimmer_i2c.yaml
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  scan: True
+  frequency: 400kHz
+
+ethernet:
+  id: eth
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO0_IN
+  phy_addr: 1
+  power_pin: GPIO16
+  use_address: ${static_ip_address}
+
+loxone:
+  id: loxone_udp
+  protocol: udp
+  loxone_ip: ${loxone_ip} # loxone miniserver ip
+  loxone_port: ${loxone_udp_port} # loxone server port
+  listen_port: ${listen_udp_port} # esp32 will listen on this port
+  # Send buffer length
+  # When the network is not ready, it can buffer some commands that are pending to be sent.
+  send_buffer_length: 64
+
+dashboard_import:
+  package_import_url: github://boneIO-eu/esphome/boneio-dimmer_8ch-v0_3.yaml@latest
+  import_full_config: true
+
+pcf8574:
+  - id: pcf_inputs
+    address: 0x38
+
+logger:
+api:
+  reboot_timeout: 0s
+ota:
+  platform: esphome
+
+web_server:
+  port: 80
+  local: true
+
+time:
+  - platform: sntp
+    id: sntp_time
+
+text_sensor:
+  - platform: version
+    name: boneio-dimmer- Version
+    icon: mdi:cube-outline
+  - platform: ethernet_info
+    ip_address:
+      entity_category: diagnostic
+      name: boneio-dimmer IP
+  - platform: template
+    name: Hostname
+    id: hostname
+    lambda: |-
+      return id(eth).get_use_address();
+    update_interval: 5min
+  - platform: template
+    name: Health Check
+    id: healthCheck
+    entity_category: diagnostic
+    lambda: |-
+      auto timestamp = id(sntp_time).now().timestamp;
+      auto keepAliveTime = "keepalivetime=" + to_string(timestamp);
+      id(loxone_udp).send_string_data(keepAliveTime);
+      return { keepAliveTime };
+    update_interval: 10s
+  # https://github.com/boneIO-eu/esphome/devices/serial_no.yaml
+  - platform: template
+    name: "Serial No."
+    lambda: |-
+      std::string mac = get_mac_address();
+      return to_string("${serial_prefix}") + mac.erase(0, mac.length()/2);
+    icon: mdi:expansion-card-variant
+    entity_category: diagnostic
+    update_interval: 60min
+
+binary_sensor:
+  # IN1
+  - platform: gpio
+    id: di1
+    name: di1
+    pin:
+      pcf8574: pcf_inputs
+      number: 1
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di1=" + to_string(int(id(di1).state)));
+
+  # IN2
+  - platform: gpio
+    id: di2
+    name: di2
+    pin:
+      pcf8574: pcf_inputs
+      number: 2
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di2=" + to_string(int(id(di2).state)));
+  # IN3
+  - platform: gpio
+    id: di3
+    name: di3
+    pin:
+      pcf8574: pcf_inputs
+      number: 3
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di3=" + to_string(int(id(di3).state)));
+  # IN4
+  - platform: gpio
+    id: di4
+    name: di4
+    pin:
+      pcf8574: pcf_inputs
+      number: 4
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di4=" + to_string(int(id(di4).state)));
+
+  # IN5
+  - platform: gpio
+    id: di5
+    name: di5
+    pin:
+      number: 36
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di5=" + to_string(int(id(di5).state)));
+  # IN6
+  - platform: gpio
+    id: di6
+    name: di6
+    pin:
+      number: 39
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di6=" + to_string(int(id(di6).state)));
+  # IN7
+  - platform: gpio
+    id: di7
+    name: di7
+    pin:
+      number: 34
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di7=" + to_string(int(id(di7).state)));
+  # IN8
+  - platform: gpio
+    id: di8
+    name: di8
+    pin:
+      number: 35
+      mode:
+        input: true
+      inverted: true
+    publish_initial_state: true
+    on_state:
+      - lambda: !lambda |-
+          id(loxone_udp).send_string_data("di8=" + to_string(int(id(di8).state)));
+
+output:
+  - platform: ledc
+    pin: 33
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chl01
+  - platform: ledc
+    pin: 32
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chl02
+  - platform: ledc
+    pin: 12
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chl03
+  - platform: ledc
+    pin: 14
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chl04
+
+  - platform: ledc
+    pin: 13
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chr01
+  - platform: ledc
+    pin: 15
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chr02
+  - platform: ledc
+    pin: 2
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chr03
+  - platform: ledc
+    pin: 17
+    frequency: 1000Hz
+    inverted: false
+    id: ledc_chr04
+
+light:
+  # chl_01
+  - platform: monochromatic
+    output: ledc_chl01
+    id: chl_01
+    name: chl_01
+    default_transition_length: ${light_default_transition_time}
+    flash_transition_length: 5s
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    effects:
+      - pulse:
+      - pulse:
+          name: "FastPulse"
+          transition_length: 0.5s
+          update_interval: 0.5s
+          min_brightness: 0%
+          max_brightness: 100%
+      - pulse:
+          name: "SlowPulse"
+          transition_length: 1s # defaults to 1s
+          update_interval: 2s
+      - pulse:
+          name: "AsymmetricalPulse"
+          transition_length:
+            on_length: 1s
+            off_length: 500ms
+          update_interval: 1.5s
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chl_01).remote_values;
+          id(loxone_udp).send_string_data("chl_01;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chl_02
+  - platform: monochromatic
+    output: ledc_chl02
+    id: chl_02
+    name: chl_02
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chl_02).remote_values;
+          id(loxone_udp).send_string_data("chl_02;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chl_03
+  - platform: monochromatic
+    output: ledc_chl03
+    id: chl_03
+    name: chl_03
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chl_03).remote_values;
+          id(loxone_udp).send_string_data("chl_03;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chl_04
+  - platform: monochromatic
+    output: ledc_chl04
+    id: chl_04
+    name: chl_04
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chl_04).remote_values;
+          id(loxone_udp).send_string_data("chl_04;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chr_01
+  - platform: monochromatic
+    output: ledc_chr01
+    id: chr_01
+    name: chr_01
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chr_01).remote_values;
+          id(loxone_udp).send_string_data("chr_01;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chr_02
+  - platform: monochromatic
+    output: ledc_chr02
+    id: chr_02
+    name: chr_02
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chr_02).remote_values;
+          id(loxone_udp).send_string_data("chr_02;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chr_03
+  - platform: monochromatic
+    output: ledc_chr03
+    id: chr_03
+    name: chr_03
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chr_03).remote_values;
+          id(loxone_udp).send_string_data("chr_03;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+  # chr_04
+  - platform: monochromatic
+    output: ledc_chr04
+    id: chr_04
+    name: chr_04
+    default_transition_length: ${light_default_transition_time}
+    gamma_correct: 0
+    restore_mode: RESTORE_DEFAULT_OFF
+    on_state:
+      - lambda: !lambda |-
+          auto values = id(chr_04).remote_values;
+          id(loxone_udp).send_string_data("chr_04;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+
+# Uncomment to use as RGB channel.
+# - platform: rgb
+#   name: rgb_r
+#   red: ledc_chr01
+#   green: ledc_chr02
+#   blue: ledc_chr03
+#   default_transition_length: ${light_default_transition_time}
+#   gamma_correct: 0
+#   restore_mode: RESTORE_DEFAULT_OFF
+#   id: rgb_r
+#   on_state:
+#     - lambda: !lambda |-
+#         auto values = id(rgb_r).remote_values;
+#         auto state = int(values.get_state());
+#         auto red = int(values.get_red() * 255);
+#         auto green = int(values.get_green() * 255);
+#         auto blue = int(values.get_blue() * 255);
+#         auto brightness = int(values.get_brightness() * 255);
+#         id(loxone_udp).send_string_data("chr;state=" + to_string(state) +";r=" + to_string(red) + ";g=" + to_string(green) + ";b=" + to_string(blue) + ";brightness=" + to_string(brightness));
+
+# Buzzer: devices/buzzer.yaml
+switch:
+  - platform: gpio
+    id: buzzer
+    name: Buzzer
+    pin:
+      pcf8574: pcf_inputs
+      number: 0
+      mode:
+        output: true
+      inverted: true
+
+sensor:
+  # LM75 - Temperature
+  - platform: lm75
+    id: boneIO_temp
+    name: Temperature
+    update_interval: 30s
+    on_value_range:
+      - above: 70.0
+        then:
+          - switch.turn_on: buzzer
+      - below: 70.0
+        then:
+          - switch.turn_off: buzzer
+
+  # Energy Monitoring - Channel Left
+  - platform: ina219
+    address: 0x40
+    shunt_resistance: 0.005 ohm
+    max_voltage: 32V
+    max_current: 10A
+    update_interval: ${update_interval_energy_monitoring}
+    bus_voltage:
+      name: "CHL Voltage"
+    power:
+      name: "chl;power"
+      on_value:
+        - lambda: 'id(loxone_udp).send_string_data("chl;power=" + to_string(x));'
+    current:
+      name: "CHL Current"
+    shunt_voltage:
+      name: "CHL Shunt Voltage"
+
+  # Energy Monitoring - Channel Right
+  - platform: ina219
+    address: 0x41
+    shunt_resistance: 0.005 ohm
+    max_voltage: 32V
+    max_current: 10A
+    update_interval: ${update_interval_energy_monitoring}
+    bus_voltage:
+      name: "CHR Voltage"
+    power:
+      name: "chr;power"
+      on_value:
+        - lambda: 'id(loxone_udp).send_string_data("chr;power=" + to_string(x));'
+    current:
+      name: "CHR Current"
+    shunt_voltage:
+      name: "CHR Shunt Voltage"

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VirtualOut Title="BoneIO Dimmer 8ch 8di" Comment="" Address="http://192.168.31.214" CmdInit="" HintText="" CloseAfterSend="true" CmdSep=";">
+	<Info templateType="3" minVersion="15031213"/>
+	<VirtualOutCmd Title="CHL1" Comment="" CmdOnMethod="GET" CmdOffMethod="GET" CmdOn="light/chl_01/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chl_01/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHL2" Comment="" CmdOnMethod="GET" CmdOffMethod="GET" CmdOn="light/chl_02/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chl_02/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHL3" Comment="" CmdOnMethod="GET" CmdOffMethod="GET" CmdOn="light/chl_03/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chl_03/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHL4" Comment="" CmdOnMethod="GET" CmdOffMethod="GET" CmdOn="light/chl_04/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chl_04/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHR1" Comment="" CmdOnMethod="POST" CmdOffMethod="POST" CmdOn="light/chr_01/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chr_01/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHR2" Comment="" CmdOnMethod="POST" CmdOffMethod="POST" CmdOn="light/chr_02/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chr_02/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHR3" Comment="" CmdOnMethod="POST" CmdOffMethod="POST" CmdOn="light/chr_03/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chr_02/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="true" Repeat="0" RepeatRate="0"/>
+	<VirtualOutCmd Title="CHR4" Comment="" CmdOnMethod="POST" CmdOffMethod="POST" CmdOn="light/chr_04/turn_on" CmdOnHTTP="" CmdOnPost="" CmdOff="light/chr_04/turn_off" CmdOffHTTP="" CmdOffPost="" CmdAnswer="" HintText="" Analog="false" Repeat="0" RepeatRate="0"/>
+</VirtualOut>

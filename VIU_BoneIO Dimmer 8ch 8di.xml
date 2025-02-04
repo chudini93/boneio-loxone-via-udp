@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VirtualInUdp Title="BoneIO Dimmer 8ch 8di" Comment="" Address="" Port="9999">
+	<Info templateType="1" minVersion="15031213"/>
+	<VirtualInUdpCmd Title="DI1" Comment="" Address="" Check="di1=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI2" Comment="" Address="" Check="di2=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI3" Comment="" Address="" Check="di3=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI4" Comment="" Address="" Check="di4=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI5" Comment="" Address="" Check="di5=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI6" Comment="" Address="" Check="di6=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI7" Comment="" Address="" Check="di7=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="DI8" Comment="" Address="" Check="di8=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="1" DestValHigh="1" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+	<VirtualInUdpCmd Title="CHR Power" Comment="" Address="" Check="\ichr\i;power=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="100" DestValHigh="100" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v.3&gt;W" HintText=""/>
+	<VirtualInUdpCmd Title="CHL Power" Comment="" Address="" Check="chl;power=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="100" DestValHigh="100" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v.3&gt;W" HintText=""/>
+	<VirtualInUdpCmd Title="KeepAliveTime" Comment="" Address="" Check="keepalivetime=\v" Signed="true" Analog="true" SourceValLow="0" DestValLow="0" SourceValHigh="100" DestValHigh="100" DefVal="0" MinVal="-10000" MaxVal="10000" Unit="&lt;v&gt;" HintText=""/>
+</VirtualInUdp>
