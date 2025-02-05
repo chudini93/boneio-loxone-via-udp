@@ -15,7 +15,7 @@ Note: We could use UDP however it would require additional configuration changes
 ### 0.2. Save it to the location you want on your desktop (preferrably `Downloads` directory)
 
 ## 1. Adjust yaml config
-### 1.1. Open `boneio-dr-8ch-loxone.yaml.yaml` in some kind of editor
+### 1.1. Open `boneio-dr-8ch-loxone.yaml` in some kind of editor
 ### 1.2. Update fields
 - `static_ip_address`: static ip address in your network that the boneIO will be attached to
 - `loxone_ip`: Miniserver's IP address
