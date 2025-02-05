@@ -2,13 +2,14 @@ substitutions:
   name: boneio-dr-8ch-03-342908
   friendly_name: BoneIO Dimmer LED 342908
   serial_prefix: dim # Don't change it.
-  # Constants:
+  # Configurable items - Make sure those are set correctly:
   static_ip_address: "192.168.31.214"
+  loxone_ip: "192.168.31.10" # Change this to miniserver's IP address
+  loxone_udp_port: "9999" # BoneIO will send data to this port (if using multiple devices, you might want to change this)
+
+  # Further configuration - less important
   light_default_transition_time: 500ms
   update_interval_energy_monitoring: 5s
-  loxone_ip: "192.168.31.10" # Change this to miniserver's IP address
-  loxone_udp_port: "9999" # BoneIO will send data to this port
-  listen_udp_port: "8888" # BoneIO will listen on this port (Miniserver needs to send data here)
 
 esphome:
   name: ${name}
@@ -51,7 +52,7 @@ loxone:
   protocol: udp
   loxone_ip: ${loxone_ip} # loxone miniserver ip
   loxone_port: ${loxone_udp_port} # loxone server port
-  listen_port: ${listen_udp_port} # esp32 will listen on this port
+  listen_port: 8888 # esp32 will listen on this port - we don't use it, since we use HTTP
   # Send buffer length
   # When the network is not ready, it can buffer some commands that are pending to be sent.
   send_buffer_length: 64
