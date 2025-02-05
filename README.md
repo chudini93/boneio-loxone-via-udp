@@ -1,7 +1,8 @@
 # boneio-loxone-via-udp-http
 How to integrate BoneIO with Loxone via UDP & HTTP
 
-For getting info from BoneIO into Loxone we use UDP connection
+For getting info from BoneIO into Loxone we use UDP connection.
+
 For sending commands from Loxone into BoneIO we use HTTP connection. 
 
 Note: We could use UDP however it would require additional configuration changes in the yaml, where HTTP commands are working out of the box.
