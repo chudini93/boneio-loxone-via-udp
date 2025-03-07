@@ -23,12 +23,10 @@ esp32:
   board: esp32dev
 
 external_components:
-  - source: github://boneIO-eu/esphome-LM75@main #Original source and thank you note for BTomala https://github.com/boneIO-eu/esphome-lm75
-    components: [lm75]
-  - source:
-      type: git
-      url: https://github.com/hzkincony/esphome-loxone
-      ref: v1.2.1
+- source: github://boneIO-eu/esphome-LM75@main #Original source and thank you note for BTomala https://github.com/boneIO-eu/esphome-lm75
+  components: [lm75]
+- source: github://chudini93/esphome-loxone-readonly@v2.0.0
+  components: [loxone]
 
 # https://github.com/boneIO-eu/esphome/devices/dimmer_i2c.yaml
 i2c:
@@ -49,13 +47,9 @@ ethernet:
 
 loxone:
   id: loxone_udp
-  protocol: udp
   loxone_ip: ${loxone_ip} # loxone miniserver ip
   loxone_port: ${loxone_udp_port} # loxone server port
-  listen_port: 8888 # esp32 will listen on this port - we don't use it, since we use HTTP
-  # Send buffer length
-  # When the network is not ready, it can buffer some commands that are pending to be sent.
-  send_buffer_length: 64
+  listen_port: 9999
 
 dashboard_import:
   package_import_url: github://boneIO-eu/esphome/boneio-dimmer_8ch-v0_3.yaml@latest
