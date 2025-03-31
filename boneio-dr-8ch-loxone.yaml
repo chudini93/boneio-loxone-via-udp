@@ -165,7 +165,7 @@ binary_sensor:
   # IN1
   - platform: gpio
     id: di1
-    name: di1
+    icon: mdi:flag-outline
     pin:
       pcf8574: pcf_inputs
       number: 1
@@ -182,7 +182,7 @@ binary_sensor:
   # IN2
   - platform: gpio
     id: di2
-    name: di2
+    icon: mdi:flag-outline
     pin:
       pcf8574: pcf_inputs
       number: 2
@@ -199,7 +199,7 @@ binary_sensor:
   # IN3
   - platform: gpio
     id: di3
-    name: di3
+    icon: mdi:flag-outline
     pin:
       pcf8574: pcf_inputs
       number: 3
@@ -216,7 +216,7 @@ binary_sensor:
   # IN4
   - platform: gpio
     id: di4
-    name: di4
+    icon: mdi:flag-outline
     pin:
       pcf8574: pcf_inputs
       number: 4
@@ -233,7 +233,7 @@ binary_sensor:
   # IN5
   - platform: gpio
     id: di5
-    name: di5
+    icon: mdi:flag-outline
     pin:
       number: 36
       mode:
@@ -249,7 +249,7 @@ binary_sensor:
   # IN6
   - platform: gpio
     id: di6
-    name: di6
+    icon: mdi:flag-outline
     pin:
       number: 39
       mode:
@@ -265,7 +265,7 @@ binary_sensor:
   # IN7
   - platform: gpio
     id: di7
-    name: di7
+    icon: mdi:flag-outline
     pin:
       number: 34
       mode:
@@ -281,7 +281,7 @@ binary_sensor:
   # IN8
   - platform: gpio
     id: di8
-    name: di8
+    icon: mdi:flag-outline
     pin:
       number: 35
       mode:
@@ -342,7 +342,7 @@ light:
   - platform: monochromatic
     output: ledc_chl01
     id: chl_01
-    name: chl_01
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     flash_transition_length: 5s
     gamma_correct: 0
@@ -376,7 +376,7 @@ light:
   - platform: monochromatic
     output: ledc_chl02
     id: chl_02
-    name: chl_02
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -391,7 +391,7 @@ light:
   - platform: monochromatic
     output: ledc_chl03
     id: chl_03
-    name: chl_03
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -406,7 +406,7 @@ light:
   - platform: monochromatic
     output: ledc_chl04
     id: chl_04
-    name: chl_04
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -421,7 +421,7 @@ light:
   - platform: monochromatic
     output: ledc_chr01
     id: chr_01
-    name: chr_01
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -436,7 +436,7 @@ light:
   - platform: monochromatic
     output: ledc_chr02
     id: chr_02
-    name: chr_02
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -451,7 +451,7 @@ light:
   - platform: monochromatic
     output: ledc_chr03
     id: chr_03
-    name: chr_03
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
@@ -466,7 +466,7 @@ light:
   - platform: monochromatic
     output: ledc_chr04
     id: chr_04
-    name: chr_04
+    icon: mdi:led-outline
     default_transition_length: ${light_default_transition_time}
     gamma_correct: 0
     restore_mode: RESTORE_DEFAULT_OFF
