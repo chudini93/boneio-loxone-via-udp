@@ -18,10 +18,10 @@ Note: We could use UDP however it would require additional configuration changes
 ### 1.1. Open `boneio-dr-8ch-loxone.yaml` in some kind of editor
 ### 1.2. Update fields
 - `static_ip_address`: static ip address in your network that the boneIO will be attached to
-- `loxone_ip`: Miniserver's IP address
-- `loxone_udp_port`: UDP port that BoneIO will send data to (if using multiple devices, you might want to change this)
+- `miniserver_ip`: Miniserver's IP address
+- `miniserver_udp_port`: UDP port that BoneIO will send data to (if using multiple devices, you might want to change this)
 
-![image](https://github.com/user-attachments/assets/628f7fa1-6ad5-4a75-bff1-a638898d66c3)
+![image](https://github.com/user-attachments/assets/9f9f714c-dcd5-4ef0-9463-f6eebb41fb07)
 
 ### 1.3. Save changes in a file
 
@@ -39,6 +39,10 @@ There are multiple ways to do it: via usb cable, network using esphome applicati
 
 ![image](https://github.com/user-attachments/assets/2058e19d-c60f-4503-96a7-49ad2a9a6a23)
 
+## 2.1 View the esphome's device dashboard
+Navigate to `static_ip_address` of the device in a browser: for ex. `http://192.168.31.214/`
+![image](https://github.com/user-attachments/assets/089e761e-414b-4549-8191-529448c453e2)
+
 ## 3. Loxone: Configure VI/VO
 ### 1. Open your project in Loxone Config
 ### 2. Virtual Inputs: 
@@ -54,7 +58,7 @@ There are multiple ways to do it: via usb cable, network using esphome applicati
 - Use newly created template by clicking: UDP Device Template -> Import Template... -> Choose under `My Templates:` `VIU_BoneIO Dimmer 8ch 8di.xml`
 
 #### 2.2. Update UDP receive port on newly created Virtual Input to boneIO's ip address
-Change `UDP receive port` to the one from `.yaml` config under `loxone_udp_port` (defaults to `9999` and no changes are required)
+Change `UDP receive port` to the one from `.yaml` config under `miniserver_udp_port` (defaults to `9999` and no changes are required)
 
 ![image](https://github.com/user-attachments/assets/88162506-edf8-460a-ab51-56b4488d737f)
 
