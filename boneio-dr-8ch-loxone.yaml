@@ -4,8 +4,8 @@ substitutions:
   serial_prefix: dim # Don't change it.
   # Configurable items - Make sure those are set correctly:
   static_ip_address: "192.168.31.214"
-  loxone_ip: "192.168.31.10" # Change this to miniserver's IP address
-  loxone_udp_port: "9999" # BoneIO will send data to this port (if using multiple devices, you might want to change this)
+  miniserver_ip: "192.168.31.10" # Change this to miniserver's IP address
+  miniserver_udp_port: "9999" # BoneIO will send data to this port (if using multiple devices, you might want to change this)
 
   # Further configuration - less important
   light_default_transition_time: 500ms
@@ -47,8 +47,8 @@ ethernet:
 
 loxone:
   id: loxone_udp
-  loxone_ip: ${loxone_ip} # loxone miniserver ip
-  loxone_port: ${loxone_udp_port} # loxone server port
+  loxone_ip: ${miniserver_ip} # loxone miniserver ip
+  loxone_port: ${miniserver_udp_port} # loxone server port
   listen_port: 9999
 
 dashboard_import:
@@ -68,35 +68,64 @@ ota:
 web_server:
   port: 80
   local: true
+  version: 3
+  include_internal: true
+  sorting_groups:
+    - id: groups_config
+      name: "Configuration"
+      sorting_weight: 0
+    - id: groups_general
+      name: "General"
+      sorting_weight: 1
+    - id: group_digital_inputs
+      name: "Digital Inputs"
+      sorting_weight: 2
+    - id: groups_channels
+      name: "Channels"
+      sorting_weight: 3
+    - id: groups_energy
+      name: "Energy"
+      sorting_weight: 4
 
 time:
   - platform: sntp
     id: sntp_time
 
 text_sensor:
-  - platform: version
-    name: boneio-dimmer- Version
-    icon: mdi:cube-outline
+# Miniserver IP
+  - platform: template
+    name: "Miniserver IP"
+    lambda: |-
+      return to_string("${miniserver_ip}");
+    icon: mdi:lan
+    entity_category: diagnostic
+    web_server:
+      sorting_group_id: groups_config
+# Miniserver UDP Port
+  - platform: template
+    name: "Miniserver UDP Port"
+    lambda: |-
+      return to_string("${miniserver_udp_port}");
+    icon: mdi:wan
+    entity_category: diagnostic
+    web_server:
+      sorting_group_id: groups_config
+
+# Ip Address
   - platform: ethernet_info
     ip_address:
       entity_category: diagnostic
-      name: boneio-dimmer IP
-  - platform: template
-    name: Hostname
-    id: hostname
-    lambda: |-
-      return id(eth).get_use_address();
-    update_interval: 5min
-  - platform: template
-    name: Health Check
-    id: healthCheck
-    entity_category: diagnostic
-    lambda: |-
-      auto timestamp = id(sntp_time).now().timestamp;
-      auto keepAliveTime = "keepalivetime=" + to_string(timestamp);
-      id(loxone_udp).send_string_data(keepAliveTime);
-      return { keepAliveTime };
-    update_interval: 10s
+      name: Static IP address
+      icon: mdi:lan
+      web_server:
+        sorting_group_id: groups_config
+# Version
+  - platform: version
+    name: boneio-dimmer-version
+    icon: mdi:cube-outline
+    web_server:
+      sorting_group_id: groups_general
+      sorting_weight: 1
   # https://github.com/boneIO-eu/esphome/devices/serial_no.yaml
   - platform: template
     name: "Serial No."
@@ -106,6 +135,31 @@ text_sensor:
     icon: mdi:expansion-card-variant
     entity_category: diagnostic
     update_interval: 60min
+    web_server:
+      sorting_group_id: groups_general
+      sorting_weight: 2
+  - platform: template
+    name: Health Check
+    icon: mdi:hospital
+    id: healthCheck
+    entity_category: diagnostic
+    lambda: |-
+      auto timestamp = id(sntp_time).now().timestamp;
+      auto keepAliveTime = "keepalivetime=" + to_string(timestamp);
+      id(loxone_udp).send_string_data(keepAliveTime);
+      return { keepAliveTime };
+    update_interval: 10s
+    web_server:
+      sorting_group_id: groups_general
+
+button:
+  - platform: restart
+    id: restart_device
+    entity_category: config
+    name: "Restart"
+    web_server:
+      sorting_group_id: groups_general
+      sorting_weight: 99
 
 binary_sensor:
   # IN1
@@ -122,6 +176,8 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di1=" + to_string(int(id(di1).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
 
   # IN2
   - platform: gpio
@@ -137,6 +193,9 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di2=" + to_string(int(id(di2).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
+
   # IN3
   - platform: gpio
     id: di3
@@ -151,6 +210,9 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di3=" + to_string(int(id(di3).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
+
   # IN4
   - platform: gpio
     id: di4
@@ -165,6 +227,8 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di4=" + to_string(int(id(di4).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
 
   # IN5
   - platform: gpio
@@ -179,6 +243,9 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di5=" + to_string(int(id(di5).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
+
   # IN6
   - platform: gpio
     id: di6
@@ -192,6 +259,9 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di6=" + to_string(int(id(di6).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
+
   # IN7
   - platform: gpio
     id: di7
@@ -205,6 +275,9 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di7=" + to_string(int(id(di7).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
+
   # IN8
   - platform: gpio
     id: di8
@@ -218,6 +291,8 @@ binary_sensor:
     on_state:
       - lambda: !lambda |-
           id(loxone_udp).send_string_data("di8=" + to_string(int(id(di8).state)));
+    web_server:
+      sorting_group_id: group_digital_inputs
 
 output:
   - platform: ledc
@@ -294,6 +369,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chl_01).remote_values;
           id(loxone_udp).send_string_data("chl_01;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chl_02
   - platform: monochromatic
@@ -307,6 +384,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chl_02).remote_values;
           id(loxone_udp).send_string_data("chl_02;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chl_03
   - platform: monochromatic
@@ -320,6 +399,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chl_03).remote_values;
           id(loxone_udp).send_string_data("chl_03;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chl_04
   - platform: monochromatic
@@ -333,6 +414,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chl_04).remote_values;
           id(loxone_udp).send_string_data("chl_04;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chr_01
   - platform: monochromatic
@@ -346,6 +429,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chr_01).remote_values;
           id(loxone_udp).send_string_data("chr_01;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chr_02
   - platform: monochromatic
@@ -359,6 +444,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chr_02).remote_values;
           id(loxone_udp).send_string_data("chr_02;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chr_03
   - platform: monochromatic
@@ -372,6 +459,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chr_03).remote_values;
           id(loxone_udp).send_string_data("chr_03;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
   # chr_04
   - platform: monochromatic
@@ -385,6 +474,8 @@ light:
       - lambda: !lambda |-
           auto values = id(chr_04).remote_values;
           id(loxone_udp).send_string_data("chr_04;state=" + to_string(int(values.get_state())) + ";brightness=" + to_string(int(values.get_brightness() * 255)));
+    web_server:
+      sorting_group_id: groups_channels
 
 # Uncomment to use as RGB channel.
 # - platform: rgb
@@ -411,18 +502,23 @@ switch:
   - platform: gpio
     id: buzzer
     name: Buzzer
+    icon: mdi:bullhorn-outline
     pin:
       pcf8574: pcf_inputs
       number: 0
       mode:
         output: true
       inverted: true
+    web_server:
+      sorting_group_id: groups_general
+      sorting_weight: 10
 
 sensor:
   # LM75 - Temperature
   - platform: lm75
     id: boneIO_temp
     name: Temperature
+    icon: mdi:thermometer
     update_interval: 30s
     on_value_range:
       - above: 70.0
@@ -431,6 +527,8 @@ sensor:
       - below: 70.0
         then:
           - switch.turn_off: buzzer
+    web_server:
+      sorting_group_id: groups_general
 
   # Energy Monitoring - Channel Left
   - platform: ina219
@@ -441,14 +539,27 @@ sensor:
     update_interval: ${update_interval_energy_monitoring}
     bus_voltage:
       name: "CHL Voltage"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 3
     power:
       name: "chl;power"
+      icon: mdi:lightning-bolt
       on_value:
         - lambda: 'id(loxone_udp).send_string_data("chl;power=" + to_string(x));'
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 1
     current:
       name: "CHL Current"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 2
     shunt_voltage:
       name: "CHL Shunt Voltage"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 4
 
   # Energy Monitoring - Channel Right
   - platform: ina219
@@ -459,11 +570,24 @@ sensor:
     update_interval: ${update_interval_energy_monitoring}
     bus_voltage:
       name: "CHR Voltage"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 3
     power:
       name: "chr;power"
+      icon: mdi:lightning-bolt
       on_value:
         - lambda: 'id(loxone_udp).send_string_data("chr;power=" + to_string(x));'
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 1
     current:
       name: "CHR Current"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 2
     shunt_voltage:
       name: "CHR Shunt Voltage"
+      web_server:
+        sorting_group_id: groups_energy
+        sorting_weight: 4
